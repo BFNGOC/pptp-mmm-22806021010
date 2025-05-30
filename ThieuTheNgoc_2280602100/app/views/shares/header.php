@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -44,6 +45,7 @@
         }
     </style>
 </head>
+
 <body>
     <nav class="navbar navbar-expand-lg">
         <div class="container-fluid">
@@ -54,13 +56,13 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="/ProjectBanHang/Product/">Danh sách sản phẩm</a>
+                        <a class="nav-link" href="/pptp-mmm-22806021010/ThieuTheNgoc_2280602100/Product/">Danh sách sản phẩm</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/ProjectBanHang/Product/add">Thêm sản phẩm</a>
+                        <a class="nav-link" href="/pptp-mmm-22806021010/ThieuTheNgoc_2280602100/Product/add">Thêm sản phẩm</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/ProjectBanHang/Category/list">Quản lý danh mục</a>
+                        <a class="nav-link" href="/pptp-mmm-22806021010/ThieuTheNgoc_2280602100/Category/list">Quản lý danh mục</a>
                     </li>
                 </ul>
             </div>
@@ -73,4 +75,5 @@
     <!-- Bootstrap 5 JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

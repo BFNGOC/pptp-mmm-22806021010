@@ -54,7 +54,7 @@ class ProductController
                 $categories = (new CategoryModel($this->db))->getCategories();
                 include 'app/views/product/add.php';
             } else {
-                header('Location: /ProjectBanHang/Product');
+                header('Location: /pptp-mmm-22806021010/ThieuTheNgoc_2280602100/Product');
             }
         }
     }
@@ -90,7 +90,7 @@ class ProductController
                 $image
             );
             if ($edit) {
-                header('Location: /ProjectBanHang/Product');
+                header('Location: /pptp-mmm-22806021010/ThieuTheNgoc_2280602100/Product');
             } else {
                 echo "Đã xảy ra lỗi khi lưu sản phẩm.";
             }
@@ -99,7 +99,7 @@ class ProductController
     public function delete($id)
     {
         if ($this->productModel->deleteProduct($id)) {
-            header('Location: /ProjectBanHang/Product');
+            header('Location: /pptp-mmm-22806021010/ThieuTheNgoc_2280602100/Product');
         } else {
             echo "Đã xảy ra lỗi khi xóa sản phẩm.";
         }
@@ -147,7 +147,7 @@ class ProductController
                 'image' => $product->image
             ];
         }
-        header('Location: /ProjectBanHang/Product/cart');
+        header('Location: /pptp-mmm-22806021010/ThieuTheNgoc_2280602100/Product/cart');
     }
     public function list()
     {

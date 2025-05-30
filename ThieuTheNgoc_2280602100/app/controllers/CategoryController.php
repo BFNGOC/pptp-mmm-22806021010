@@ -34,7 +34,7 @@ class CategoryController
             if (empty($errors)) {
                 try {
                     $this->categoryModel->addCategory($name, $description);
-                    header("Location: /ProjectBanHang/Category/list");
+                    header("Location: /pptp-mmm-22806021010/ThieuTheNgoc_2280602100/Category/list");
                     exit();
                 } catch (Exception $e) {
                     $errors[] = "Lỗi khi thêm danh mục: " . $e->getMessage();
@@ -65,7 +65,7 @@ class CategoryController
             if (empty($errors)) {
                 try {
                     $this->categoryModel->updateCategory($id, $name, $description);
-                    header("Location: /ProjectBanHang/Category/list");
+                    header("Location: /pptp-mmm-22806021010/ThieuTheNgoc_2280602100/Category/list");
                     exit();
                 } catch (Exception $e) {
                     $errors[] = "Lỗi khi cập nhật danh mục: " . $e->getMessage();
@@ -79,11 +79,11 @@ class CategoryController
     {
         try {
             $this->categoryModel->deleteCategory($id);
-            header("Location: /ProjectBanHang/Category/list");
+            header("Location: /pptp-mmm-22806021010/ThieuTheNgoc_2280602100/Category/list");
             exit();
         } catch (Exception $e) {
             // Handle error (e.g., redirect with error message)
-            header("Location: /ProjectBanHang/Category/list?error=Xóa danh mục thất bại: " . urlencode($e->getMessage()));
+            header("Location: /pptp-mmm-22806021010/ThieuTheNgoc_2280602100/Category/list?error=Xóa danh mục thất bại: " . urlencode($e->getMessage()));
             exit();
         }
     }
