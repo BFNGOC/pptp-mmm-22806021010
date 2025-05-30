@@ -1,4 +1,5 @@
 <?php
+session_start();
 require_once 'app/models/ProductModel.php';
 $url = $_GET['url'] ?? '';
 $url = rtrim($url, '/');
@@ -16,7 +17,7 @@ if (!file_exists('app/controllers/' . $controllerName . '.php')) {
     die('Controller not found');
 }
 require_once 'app/controllers/' . $controllerName . '.php';
-$controller = new $controllerName();    
+$controller = new $controllerName();
 if (!method_exists($controller, $action)) {
     // Xử lý không tìm thấy action
     die('Action not found');
