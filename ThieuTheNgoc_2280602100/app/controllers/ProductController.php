@@ -11,11 +11,18 @@ class ProductController
         $this->db = (new Database())->getConnection();
         $this->productModel = new ProductModel($this->db);
     }
+
+    // Kiểm tra quyền Admin
+    private function isAdmin() {
+        return SessionHelper::isAdmin();
+    }
+
     public function index()
     {
         $products = $this->productModel->getProducts();
         include 'app/views/product/list.php';
     }
+
     public function show($id)
     {
         $product = $this->productModel->getProductById($id);
@@ -25,13 +32,23 @@ class ProductController
             echo "Không thấy sản phẩm.";
         }
     }
+
     public function add()
     {
+        if (!$this->isAdmin()) {
+            echo "Bạn không có quyền truy cập chức năng này!";
+            exit;
+        }
         $categories = (new CategoryModel($this->db))->getCategories();
         include_once 'app/views/product/add.php';
     }
     public function save()
     {
+        if (!$this->isAdmin()) {
+            echo "Bạn không có quyền truy cập chức năng này!";
+            exit;
+        }
+
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $name = $_POST['name'] ?? '';
             $description = $_POST['description'] ?? '';
@@ -60,6 +77,10 @@ class ProductController
     }
     public function edit($id)
     {
+        if (!$this->isAdmin()) {
+            echo "Bạn không có quyền truy cập chức năng này!";
+            exit;
+        }
         $product = $this->productModel->getProductById($id);
         $categories = (new CategoryModel($this->db))->getCategories();
         if ($product) {
@@ -70,6 +91,11 @@ class ProductController
     }
     public function update()
     {
+        if (!$this->isAdmin()) {
+            echo "Bạn không có quyền truy cập chức năng này!";
+            exit;
+        }
+
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $id = $_POST['id'];
             $name = $_POST['name'];
@@ -98,6 +124,11 @@ class ProductController
     }
     public function delete($id)
     {
+        if (!$this->isAdmin()) {
+            echo "Bạn không có quyền truy cập chức năng này!";
+            exit;
+        }
+        
         if ($this->productModel->deleteProduct($id)) {
             header('Location: /pptp-mmm-22806021010/ThieuTheNgoc_2280602100/Product');
         } else {
@@ -219,6 +250,61 @@ class ProductController
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $id = $_POST['id'] ?? null;
             if ($id && isset($_SESSION['cart'][$id])) {
+                unset($_SESSION['cart'][$id]);
+            }
+        }
+        header('Location: /pptp-mmm-22806021010/ThieuTheNgoc_2280602100/Product/cart');
+        exit;
+    }
+
+    public function updateCart()
+    {
+        // Chỉ xử lý nếu request là POST
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            // $_POST['quantities'] sẽ là một mảng вида [product_id => quantity]
+            if (isset($_POST['quantities']) && is_array($_POST['quantities'])) {
+                
+                foreach ($_POST['quantities'] as $id => $quantity) {
+                    // Đảm bảo id và số lượng là số nguyên
+                    $id = (int)$id;
+                    $quantity = (int)$quantity;
+
+                    // Kiểm tra xem sản phẩm có tồn tại trong giỏ hàng không
+                    if (isset($_SESSION['cart'][$id])) {
+                        if ($quantity > 0) {
+                            // Cập nhật số lượng mới
+                            $_SESSION['cart'][$id]['quantity'] = $quantity;
+                        } else {
+                            // Nếu số lượng là 0 hoặc nhỏ hơn, xóa sản phẩm khỏi giỏ
+                            unset($_SESSION['cart'][$id]);
+                        }
+                    }
+                }
+            }
+        }
+        // Sau khi cập nhật xong, chuyển hướng người dùng trở lại trang giỏ hàng
+        header('Location: /pptp-mmm-22806021010/ThieuTheNgoc_2280602100/Product/cart');
+        exit;
+    }
+    // Tăng số lượng sản phẩm trong cart
+    public function increaseQuantity($id)
+    {
+        if (isset($_SESSION['cart'][$id])) {
+            $_SESSION['cart'][$id]['quantity']++;
+        }
+        // Sau khi tăng, quay lại trang cart
+        header('Location: /pptp-mmm-22806021010/ThieuTheNgoc_2280602100/Product/cart');
+        exit;
+    }
+
+    // Giảm số lượng sản phẩm trong cart
+    public function decreaseQuantity($id)
+    {
+        if (isset($_SESSION['cart'][$id])) {
+            // Nếu quantity > 1, giảm, còn không thì xóa khỏi cart
+            if ($_SESSION['cart'][$id]['quantity'] > 1) {
+                $_SESSION['cart'][$id]['quantity']--;
+            } else {
                 unset($_SESSION['cart'][$id]);
             }
         }

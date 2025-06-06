@@ -43,6 +43,12 @@
         .navbar-toggler-icon {
             background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(26, 26, 26, 1)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
         }
+        .nav-item.flex {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 150px; /* thử độ rộng phù hợp */
+}
     </style>
 </head>
 
@@ -55,22 +61,33 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="/pptp-mmm-22806021010/ThieuTheNgoc_2280602100/Product/cart">Xem giỏ hàng</a>
-                    </li>
+                    <?php if (SessionHelper::isLoggedIn()): ?>
+                        <li class="nav-item flex justify-content-center align-items-center">
+                            <a class="nav-link" href="/pptp-mmm-22806021010/ThieuTheNgoc_2280602100/Product/cart">Xem giỏ hàng</a>
+                            <?php 
+                                $count = isset($_SESSION['cart']) ? count($_SESSION['cart']) : 0;
+                                if ($count > 0) {
+                                    echo "<span class='badge bg-info ms-1'>$count</span>";
+                                }
+                            ?>
+                        </li>
+                    <?php endif; ?>
                     <li class="nav-item">
                         <a class="nav-link" href="/pptp-mmm-22806021010/ThieuTheNgoc_2280602100/Product/">Danh sách sản phẩm</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/pptp-mmm-22806021010/ThieuTheNgoc_2280602100/Product/add">Thêm sản phẩm</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/pptp-mmm-22806021010/ThieuTheNgoc_2280602100/Category/list">Quản lý danh mục</a>
-                    </li>
+                    <?php if (SessionHelper::isAdmin()): ?>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/pptp-mmm-22806021010/ThieuTheNgoc_2280602100/Product/add">Thêm sản phẩm</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/pptp-mmm-22806021010/ThieuTheNgoc_2280602100/Category/list">Quản lý danh mục</a>
+                        </li>
+                    <?php endif; ?>
                     <li class="nav-item">
                         <?php
-                            if(SessionHelper::isLoggedIn()){
-                                echo "<a class='navlink'>".$_SESSION['username']."</a>";
+                            if (SessionHelper::isLoggedIn()) {
+                                echo "<a class='nav-link'>" . htmlspecialchars($_SESSION['username']) . "
+                                (" . SessionHelper::getRole() . ")</a>";
                             }
                             else{
                                 echo "<a class='nav-link d-block'

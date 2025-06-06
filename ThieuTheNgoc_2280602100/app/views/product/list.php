@@ -163,9 +163,11 @@
 
 <div class="container mt-5">
     <h1>Danh sách sản phẩm</h1>
-    <div class="text-center mb-4">
-        <a href="/pptp-mmm-22806021010/ThieuTheNgoc_2280602100/Product/add" class="btn btn-success">Thêm sản phẩm mới</a>
-    </div>
+    <?php if (SessionHelper::isAdmin()): ?>
+        <div class="text-center mb-4">
+            <a href="/pptp-mmm-22806021010/ThieuTheNgoc_2280602100/Product/add" class="btn btn-success">Thêm sản phẩm mới</a>
+        </div>
+    <?php endif; ?>
     <ul class="list-group">
         <?php foreach ($products as $product): ?>
             <li class="list-group-item">
@@ -184,9 +186,19 @@
                     <p>Giá: <?php echo number_format($product->price, 0, ',', '.'); ?> VND</p>
                     <p>Danh mục: <?php echo htmlspecialchars($product->category_name, ENT_QUOTES, 'UTF-8'); ?></p>
                     <div class="d-flex gap-2">
-                        <a href="/pptp-mmm-22806021010/ThieuTheNgoc_2280602100/Product/edit/<?php echo $product->id; ?>" class="btn btn-warning">Sửa</a>
-                        <a href="/pptp-mmm-22806021010/ThieuTheNgoc_2280602100/Product/delete/<?php echo $product->id; ?>" class="btn btn-danger" onclick="return confirm('Bạn có chắc chắn muốn xóa sản phẩm này?');">Xóa</a>
-                        <a href="/pptp-mmm-22806021010/ThieuTheNgoc_2280602100/Product/addToCart/<?php echo $product->id; ?>" class="btn btn-primary">Thêm vào giỏ hàng</a>
+                        <?php if (SessionHelper::isAdmin()): ?>
+                            <a href="/pptp-mmm-22806021010/ThieuTheNgoc_2280602100/Product/edit/<?php echo $product->id; ?>"
+                                class="btn btn-warning">
+                                <i class="fas fa-edit me-1"></i> Sửa
+                            </a>
+                            <a href="/pptp-mmm-22806021010/ThieuTheNgoc_2280602100/Product/delete/<?php echo $product->id; ?>"
+                                class="btn btn-danger">
+                                <i class="fas fa-trash me-1"></i> Xóa
+                            </a>
+                        <?php endif; ?>
+                        <?php if (SessionHelper::isLoggedIn()): ?>
+                            <a href="/pptp-mmm-22806021010/ThieuTheNgoc_2280602100/Product/addToCart/<?php echo $product->id; ?>" class="btn btn-primary">Thêm vào giỏ hàng</a>
+                        <?php endif; ?>
                     </div>
                 </div>
             </li>
