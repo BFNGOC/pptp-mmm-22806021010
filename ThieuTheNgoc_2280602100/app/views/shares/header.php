@@ -67,6 +67,27 @@
                     <li class="nav-item">
                         <a class="nav-link" href="/pptp-mmm-22806021010/ThieuTheNgoc_2280602100/Category/list">Quản lý danh mục</a>
                     </li>
+                    <li class="nav-item">
+                        <?php
+                            if(SessionHelper::isLoggedIn()){
+                                echo "<a class='navlink'>".$_SESSION['username']."</a>";
+                            }
+                            else{
+                                echo "<a class='nav-link d-block'
+                                href='/pptp-mmm-22806021010/ThieuTheNgoc_2280602100/account/login'>Đăng nhập</a>
+                                ";
+                            }
+                        ?>
+                    </li>
+                    <li class="nav-item">
+                        </a>
+                        <?php
+                            if(SessionHelper::isLoggedIn()){
+                                echo "<a class='nav-link'
+                                href='/pptp-mmm-22806021010/ThieuTheNgoc_2280602100/account/logout'>Đăng xuất</a>";
+                            }
+                        ?>
+                    </li>
                 </ul>
             </div>
         </div>
