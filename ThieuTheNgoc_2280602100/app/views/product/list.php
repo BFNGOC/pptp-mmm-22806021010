@@ -177,17 +177,25 @@
 <?php include 'app/views/shares/footer.php'; ?>
 
 <script>
-document.addEventListener("DOMContentLoaded", function () {
-    fetch('/pptp-mmm-22806021010/ThieuTheNgoc_2280602100/api/product')
+    document.addEventListener("DOMContentLoaded", function () {
+        const token = localStorage.getItem('jwtToken');
+
+        if (!token) {
+            alert('Vui lòng đăng nhập');
+            location.href = '/pptp-mmm-22806021010/ThieuTheNgoc_2280602100/account/login'; // Điều hướng đến trang đăng nhập
+            return;
+        }
+
+        fetch('/pptp-mmm-22806021010/ThieuTheNgoc_2280602100/api/product', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token
+            }
+        })
         .then(response => response.json())
         .then(data => {
             const productList = document.getElementById('product-list');
-
-            if (!data.length) {
-                productList.innerHTML = '<li class="list-group-item">Không có sản phẩm nào.</li>';
-                return;
-            }
-
             data.forEach(product => {
                 const productItem = document.createElement('li');
                 productItem.className = 'list-group-item';
@@ -195,6 +203,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 const imageSrc = product.image 
                     ? `/pptp-mmm-22806021010/ThieuTheNgoc_2280602100/${product.image}` 
                     : '/pptp-mmm-22806021010/ThieuTheNgoc_2280602100/images/no-image.png';
+
 
                 productItem.innerHTML = `
                     <img src="${imageSrc}" alt="Product Image" class="product-image">
@@ -221,31 +230,25 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 productList.appendChild(productItem);
             });
-        })
-        .catch(error => {
-            console.error('Lỗi khi gọi API sản phẩm:', error);
-            alert('Không thể tải danh sách sản phẩm.');
         });
-});
+    });
 
-function deleteProduct(id) {
-    if (confirm('Bạn có chắc muốn xóa sản phẩm này?')) {
-        fetch(`/pptp-mmm-22806021010/ThieuTheNgoc_2280602100/api/product/${id}`, {
-            method: 'DELETE'
-        })
-        .then(response => response.json())
-        .then(result => {
-            if (result.message === 'Product deleted successfully') {
-                alert('Sản phẩm đã được xóa.');
-                location.reload();
-            } else {
-                alert('Xóa sản phẩm thất bại.');
-            }
-        })
-        .catch(error => {
-            console.error('Lỗi khi xóa:', error);
-            alert('Lỗi khi xóa sản phẩm.');
-        });
+    function deleteProduct(id) {
+        if (confirm('Bạn có chắc chắn muốn xóa sản phẩm này?')) {
+            fetch(`/pptp-mmm-22806021010/ThieuTheNgoc_2280602100/api/product/${id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem('jwtToken')
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.message === 'Product deleted successfully') {
+                    location.reload();
+                } else {
+                    alert('Xóa sản phẩm thất bại');
+                }
+            });
+        }
     }
-}
 </script>

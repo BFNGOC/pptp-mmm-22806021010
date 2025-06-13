@@ -1,73 +1,85 @@
 <?php include 'app/views/shares/header.php'; ?>
 
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-8 col-lg-6">
-            <div class="card shadow-lg border-0 rounded-lg">
-                <div class="card-header">
-                    <h3 class="text-center font-weight-light my-4">Đăng Nhập</h3>
-                </div>
-                <div class="card-body">
+<section class="vh-100 gradient-custom">
+    <div class="container py-5 h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+                <div class="card bg-dark text-white" style="border-radius: 1rem;">
+                    <div class="card-body p-5 text-center">
+                        <form id="login-form">
+                            <div class="mb-md-5 mt-md-4 pb-5">
+                                <h2 class="fw-bold mb-2 text-uppercase">Login</h2>
+                                <p class="text-white-50 mb-5">Please enter your login and password!</p>
 
-                    <?php
-                        // Vẫn giữ lại khối hiển thị lỗi, rất hữu ích khi đăng nhập sai
-                        if (isset($errors) && !empty($errors)) {
-                            echo '<div class="alert alert-danger" role="alert">';
-                            echo '<ul>';
-                            foreach ($errors as $err) {
-                                echo "<li class='mb-0'>$err</li>";
-                            }
-                            echo '</ul>';
-                            echo '</div>';
-                        }
-                    ?>
-                    
-                    <!-- Sửa action trỏ đến controller xử lý login -->
-                    <form action="/pptp-mmm-22806021010/ThieuTheNgoc_2280602100/account/checklogin" method="post">
-                        <!-- Gợi ý: Rút ngắn đường dẫn để dễ quản lý hơn -->
-                        <!-- <form action="/pptp-mmm-22806021010/ThieuTheNgoc_2280602100/account/checklogin" method="post"> -->
+                                <div class="form-outline form-white mb-4">
+                                    <input type="text" name="username" class="form-control form-control-lg" />
+                                    <label class="form-label" for="typeEmailX">UserName</label>
+                                </div>
 
-                        <!-- Tên tài khoản -->
-                        <div class="mb-3">
-                            <label for="username" class="form-label">Tên tài khoản</label>
-                            <input type="text" class="form-control" id="username" name="username" placeholder="Nhập tên tài khoản của bạn" required>
-                        </div>
+                                <div class="form-outline form-white mb-4">
+                                    <input type="password" name="password" class="form-control form-control-lg" />
+                                    <label class="form-label" for="typePasswordX">Password</label>
+                                </div>
 
-                        <!-- Mật khẩu -->
-                        <div class="mb-3">
-                            <label for="password" class="form-label">Mật khẩu</label>
-                            <input type="password" class="form-control" id="password" name="password" placeholder="Nhập mật khẩu" required>
-                        </div>
-                        
-                        <!-- Quên mật khẩu & Ghi nhớ đăng nhập -->
-                        <div class="d-flex align-items-center justify-content-between mt-4 mb-0">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" id="rememberMe">
-                                <label class="form-check-label" for="rememberMe">
-                                    Ghi nhớ tôi
-                                </label>
+                                <p class="small mb-5 pb-lg-2">
+                                    <a class="text-white-50" href="#!">Forgot password?</a>
+                                </p>
+
+                                <button class="btn btn-outline-light btn-lg px-5" type="submit">Login</button>
+
+                                <div class="d-flex justify-content-center text-center mt-4 pt-1">
+                                    <a href="#!" class="text-white"><i class="fab fa-facebook-f fa-lg"></i></a>
+                                    <a href="#!" class="text-white"><i class="fab fa-twitter fa-lg mx-4 px-2"></i></a>
+                                    <a href="#!" class="text-white"><i class="fab fa-google fa-lg"></i></a>
+                                </div>
                             </div>
-                            <a class="small" href="#">Quên mật khẩu?</a>
-                        </div>
 
-
-                        <!-- Nút Đăng Nhập -->
-                        <div class="mt-4 mb-0">
-                            <div class="d-grid">
-                                <button type="submit" class="btn btn-primary btn-lg">Đăng Nhập</button>
+                            <div>
+                                <p class="mb-0">
+                                    Don't have an account?
+                                    <a href="/pptp-mmm-22806021010/ThieuTheNgoc_2280602100/account/register" class="text-white-50 fw-bold">Sign Up</a>
+                                </p>
                             </div>
-                        </div>
-
-                    </form>
-                </div>
-                <div class="card-footer text-center py-3">
-                    <!-- Sửa lại link trỏ đến trang đăng ký -->
-                    <div class="small"><a href="/pptp-mmm-22806021010/ThieuTheNgoc_2280602100/account/register">Bạn chưa có tài khoản? Đăng ký ngay</a></div>
-                    <!-- <div class="small"><a href="/pptp-mmm-22806021010/ThieuTheNgoc_2280602100/account/register">Bạn chưa có tài khoản? Đăng ký ngay</a></div> -->
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
+</section>
 
 <?php include 'app/views/shares/footer.php'; ?>
+
+<script>
+    document.getElementById('login-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const formData = new FormData(this);
+        const jsonData = {};
+
+        formData.forEach((value, key) => {
+            jsonData[key] = value;
+        });
+
+        fetch('/pptp-mmm-22806021010/ThieuTheNgoc_2280602100/account/checkLogin', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(jsonData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.token) {
+                localStorage.setItem('jwtToken', data.token);
+                location.href = '/pptp-mmm-22806021010/ThieuTheNgoc_2280602100/Product';
+            } else {
+                alert('Đăng nhập thất bại');
+            }
+        })
+        .catch(error => {
+            console.error('Lỗi khi gọi API:', error);
+            alert('Có lỗi xảy ra khi đăng nhập!');
+        });
+    });
+</script>
