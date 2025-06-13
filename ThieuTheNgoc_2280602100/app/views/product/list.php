@@ -168,41 +168,84 @@
             <a href="/pptp-mmm-22806021010/ThieuTheNgoc_2280602100/Product/add" class="btn btn-success">Thêm sản phẩm mới</a>
         </div>
     <?php endif; ?>
-    <ul class="list-group">
-        <?php foreach ($products as $product): ?>
-            <li class="list-group-item">
-                <?php if ($product->image): ?>
-                    <img src="/pptp-mmm-22806021010/ThieuTheNgoc_2280602100/<?php echo htmlspecialchars($product->image, ENT_QUOTES, 'UTF-8'); ?>" alt="Product Image" class="product-image">
-                <?php else: ?>
-                    <img src="/pptp-mmm-22806021010/ThieuTheNgoc_2280602100/images/no-image.png" alt="No Image" class="product-image">
-                <?php endif; ?>
-                <div class="product-details">
-                    <h2>
-                        <a href="/pptp-mmm-22806021010/ThieuTheNgoc_2280602100/Product/show/<?php echo $product->id; ?>">
-                            <?php echo htmlspecialchars($product->name, ENT_QUOTES, 'UTF-8'); ?>
-                        </a>
-                    </h2>
-                    <p><?php echo htmlspecialchars($product->description, ENT_QUOTES, 'UTF-8'); ?></p>
-                    <p>Giá: <?php echo number_format($product->price, 0, ',', '.'); ?> VND</p>
-                    <p>Danh mục: <?php echo htmlspecialchars($product->category_name, ENT_QUOTES, 'UTF-8'); ?></p>
-                    <div class="d-flex gap-2">
-                        <?php if (SessionHelper::isAdmin()): ?>
-                            <a href="/pptp-mmm-22806021010/ThieuTheNgoc_2280602100/Product/edit/<?php echo $product->id; ?>"
-                                class="btn btn-warning">
-                                <i class="fas fa-edit me-1"></i> Sửa
-                            </a>
-                            <a href="/pptp-mmm-22806021010/ThieuTheNgoc_2280602100/Product/delete/<?php echo $product->id; ?>"
-                                class="btn btn-danger">
-                                <i class="fas fa-trash me-1"></i> Xóa
-                            </a>
-                        <?php endif; ?>
-                        <?php if (SessionHelper::isLoggedIn()): ?>
-                            <a href="/pptp-mmm-22806021010/ThieuTheNgoc_2280602100/Product/addToCart/<?php echo $product->id; ?>" class="btn btn-primary">Thêm vào giỏ hàng</a>
-                        <?php endif; ?>
-                    </div>
-                </div>
-            </li>
-        <?php endforeach; ?>
+    
+    <ul class="list-group" id="product-list">
+        <!-- Sản phẩm sẽ được render tại đây bằng JS -->
     </ul>
 </div>
+
 <?php include 'app/views/shares/footer.php'; ?>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    fetch('/pptp-mmm-22806021010/ThieuTheNgoc_2280602100/api/product')
+        .then(response => response.json())
+        .then(data => {
+            const productList = document.getElementById('product-list');
+
+            if (!data.length) {
+                productList.innerHTML = '<li class="list-group-item">Không có sản phẩm nào.</li>';
+                return;
+            }
+
+            data.forEach(product => {
+                const productItem = document.createElement('li');
+                productItem.className = 'list-group-item';
+
+                const imageSrc = product.image 
+                    ? `/pptp-mmm-22806021010/ThieuTheNgoc_2280602100/${product.image}` 
+                    : '/pptp-mmm-22806021010/ThieuTheNgoc_2280602100/images/no-image.png';
+
+                productItem.innerHTML = `
+                    <img src="${imageSrc}" alt="Product Image" class="product-image">
+                    <div class="product-details">
+                        <h2>
+                            <a href="/pptp-mmm-22806021010/ThieuTheNgoc_2280602100/Product/show/${product.id}">
+                                ${product.name}
+                            </a>
+                        </h2>
+                        <p>${product.description}</p>
+                        <p>Giá: ${parseInt(product.price).toLocaleString()} VND</p>
+                        <p>Danh mục: ${product.category_name}</p>
+                        <div class="d-flex gap-2">
+                            <a href="/pptp-mmm-22806021010/ThieuTheNgoc_2280602100/Product/edit/${product.id}" class="btn btn-warning">
+                                <i class="fas fa-edit me-1"></i> Sửa
+                            </a>
+                            <button onclick="deleteProduct(${product.id})" class="btn btn-danger">
+                                <i class="fas fa-trash me-1"></i> Xóa
+                            </button>
+                            <a href="/pptp-mmm-22806021010/ThieuTheNgoc_2280602100/Product/addToCart/${product.id}" class="btn btn-primary">Thêm vào giỏ hàng</a>
+                        </div>
+                    </div>
+                `;
+
+                productList.appendChild(productItem);
+            });
+        })
+        .catch(error => {
+            console.error('Lỗi khi gọi API sản phẩm:', error);
+            alert('Không thể tải danh sách sản phẩm.');
+        });
+});
+
+function deleteProduct(id) {
+    if (confirm('Bạn có chắc muốn xóa sản phẩm này?')) {
+        fetch(`/pptp-mmm-22806021010/ThieuTheNgoc_2280602100/api/product/${id}`, {
+            method: 'DELETE'
+        })
+        .then(response => response.json())
+        .then(result => {
+            if (result.message === 'Product deleted successfully') {
+                alert('Sản phẩm đã được xóa.');
+                location.reload();
+            } else {
+                alert('Xóa sản phẩm thất bại.');
+            }
+        })
+        .catch(error => {
+            console.error('Lỗi khi xóa:', error);
+            alert('Lỗi khi xóa sản phẩm.');
+        });
+    }
+}
+</script>
