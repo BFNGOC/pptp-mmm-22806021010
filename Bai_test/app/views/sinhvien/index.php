@@ -149,7 +149,6 @@
         <th>Giới tính</th>
         <th>Ngày sinh</th>
         <th>Hình</th>
-        <th>Ngành học</th>
         <th>Hành động</th>
     </tr>
     </thead>
@@ -161,7 +160,6 @@
             <td><?= $sv['GioiTinh'] ?></td>
             <td><?= $sv['NgaySinh'] ?></td>
             <td><img src="images/<?= $sv['Hinh'] ?>" alt="<?= $sv['HoTen'] ?>" onerror="this.src='images/default.png';"></td>
-            <td><?= $sv['TenNganh'] ?? '' ?></td>
             <td class="actions">
                 <a href="?action=detail&id=<?= $sv['MaSV'] ?>">Xem</a>
                 <a href="?action=edit&id=<?= $sv['MaSV'] ?>">Sửa</a>
